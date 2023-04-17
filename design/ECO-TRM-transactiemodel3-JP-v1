@@ -1,0 +1,10 @@
+title Transactiemodel ecopowrrr deel 3/3
+
+== Transactie: Spreadsheets genereren ==
+actor user
+user -> back-end: ophalen spreadsheets
+back-end -> database: ophalen data
+back-end <-- database: data
+back-end -> back-end: calculaties
+user <-- back-end: verstuur spreadsheets
+

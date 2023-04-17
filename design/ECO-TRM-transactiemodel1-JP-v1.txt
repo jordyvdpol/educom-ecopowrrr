@@ -1,0 +1,12 @@
+title Transactiemodel ecopowrrr deel 1/3
+
+==Transactie: Klant toevoegen ==
+actor mobiele-app
+mobiele-app -> back-end: persoons gegevens versturen
+back-end-> API: adres en geo informatie aanvragen
+back-end <-- API: versturen opgevraagde gegevens
+database database
+back-end -> database: aanmaken klant
+back-end <-- database: informatie weggeschreven
+back-end -> apparaat: activatie bericht
+
