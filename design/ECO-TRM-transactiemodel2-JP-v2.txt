@@ -1,0 +1,22 @@
+title Transactiemodel ecopowrrr deel 2/3
+
+participant apparaat
+
+
+participant user
+
+participant back-end
+
+
+==Transactie: Periodiek gegevens uitlezen klant ==
+participant back-end
+
+database database
+user <-back-end: ophalen klant status
+user --> back-end: stuur resultaat
+back-end -> apparaat: ophalen informatie apparaat
+back-end <--apparaat: stuur resultaat
+
+back-end -> database: Opslaan uitgelezen informatie
+back-end <--database: informatie weggeschreven
+
