@@ -3,6 +3,12 @@ console.log("I am running...")
 import express from "express"
 const app = express()
 
+// Server is listening on tcp-port 3000
+app.listen(3000, () => {
+    console.log("Running!")
+})
+
+// --------------------------------------------------- GET ---------------------------------------------------------
 const courses = [
     {id: 1, name: 'JavaScript'},
     {id: 2, name: 'NodeJS'},
@@ -26,7 +32,34 @@ app.get('/courses/:id', (request, response) => {
     response.send(result[0])
 })
 
-// Server is listening on tcp-port 3000
-app.listen(3000, () => {
-    console.log("Running!")
+// ----------------------------------------------- POST ---------------------------------------------------------
+//enable JSON input
+app.use (express.json())
+/// You might get a CORS error when sending a request from localhost (i.e. a React
+/// application) So we need to tell our server to accept all requests.
+app.use ((request, result, next) => {
+    result.setHeader("Access-Control-Allow-Origin", '*')
+    result.setHeader('Acces-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+    result.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type')
+    next()
+})
+
+app.post('/post', (request, response) => {
+    console.log(request.body)
+    response.send({received: request.body})
+})
+
+
+// ----------------------------------------------- PUT --------------------------------------------------------
+
+app.put('/put/:id', (request, response) => {
+    let searchId = parseInt(request.params.id)
+    response.send({id: searchId, received: request.body})
+})
+
+
+// ----------------------------------------------- DELETE --------------------------------------------------------
+app.delete('/delete/:id', (request, response) => {
+    let searchId = parseInt(request.params.id)
+    response.send({id: searchId, deleted:true})
 })
