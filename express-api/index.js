@@ -30,12 +30,9 @@ const courses =
         }
 
 
-app.post('/courses', async (request, response) => {  
-    try {
-      const insertedId = await mongo.insert('test', courses)
-      response.send(`Inserted course with ID: ${insertedId}`)
-    } catch (err) {
-      console.error(err)
-      response.status(500).send("Error inserting course")
-    }
-  })
+
+app.post('/courses', (request, response) => {
+    mongo.insert('test', courses)
+      .then(insertedId => response.send(`Inserted course with ID: ${insertedId}`))
+      .catch( err =>  response.status(500).send(err.message))
+})
