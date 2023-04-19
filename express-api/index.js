@@ -11,13 +11,7 @@ app.listen(3000, () => {
 })
 
 // --------------------------------------------------- GET ---------------------------------------------------------
-const courses = [
-    {
-        "name": "Express Server API",
-        "level": "intermediate",
-        "technology": ["JavaScript", "NodeJS", "Express", "MongoDB"]
-        }
-]
+
 
 
 app.get('/', (request, response) => {
@@ -28,3 +22,20 @@ app.get('/', (request, response) => {
 })
 
 
+const courses = 
+    {
+        "name": "Express Server API",
+        "level": "intermediate",
+        "technology": ["JavaScript", "NodeJS", "Express", "MongoDB"]
+        }
+
+
+app.post('/courses', async (request, response) => {  
+    try {
+      const insertedId = await mongo.insert('test', courses)
+      response.send(`Inserted course with ID: ${insertedId}`)
+    } catch (err) {
+      console.error(err)
+      response.status(500).send("Error inserting course")
+    }
+  })
