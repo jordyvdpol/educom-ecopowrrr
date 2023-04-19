@@ -1,5 +1,7 @@
-console.log("I am running...")
+// at the top of index.js
+import mongo from '../lib/mongo.mjs'
 
+// Set up the express module
 import express from "express"
 const app = express()
 
@@ -17,8 +19,21 @@ const courses = [
 
 //First route
 app.get('/', (request, response) => {
-    response.send({page: 'Homepage'})
+    /// First call the list function/promise from the mongo class
+    mongo.list()
+
+    // Wait for the result
+    .then(result => {
+        //send the result to the client
+        response.send(result)
+    })
+
+    //Got an error? Catch it, and retunr it to the client
+    .catch( err=> {
+        response.send(err)
+    })
 })
+
 
 //Second route
 app.get('/courses', (request, response) => {
