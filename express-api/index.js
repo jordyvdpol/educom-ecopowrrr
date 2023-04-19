@@ -41,3 +41,15 @@ app.post('/courses', (request, response) => {
       .then(insertedId => response.send(`Inserted course with ID: ${insertedId}`))
       .catch( err =>  response.status(500).send(err.message))
 })
+
+const updateData =    {
+    "name": "updated",
+    "level": "updated",
+    "technology": ["updated", "updated", "updated", "updated"]
+    }
+
+app.put ('/updateCourse/:id',(request, response) => {
+    mongo.update('test', request.params.id, updateData)
+    .then(result => response.send(`Course updated: ${result.modifiedCount} document modified`))
+    .catch( err =>  response.status(500).send(err.message))
+})
