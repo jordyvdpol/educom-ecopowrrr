@@ -53,6 +53,22 @@ export default class Mongo {
             await client.close()
         }
     }
+
+    static delete = async (collection, id) => {
+        let query = { _id : new ObjectId(id) }
+        try {
+            await client.connect()
+            const data = await client.db(mongoDB)
+                                     .collection(collection)
+                                     .deleteOne(query)
+            return data
+        } catch (err) {
+            throw new Error(err.message)
+        } finally {
+            await client.close()
+        }
+    }
+
   }
 
 

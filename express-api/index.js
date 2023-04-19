@@ -53,3 +53,9 @@ app.put ('/updateCourse/:id',(request, response) => {
     .then(result => response.send(`Course updated: ${result.modifiedCount} document modified`))
     .catch( err =>  response.status(500).send(err.message))
 })
+
+app.delete ('/deleteCourse/:id',(request, response) => {
+    mongo.delete('test', request.params.id)
+    .then(result => response.send(`Course deleted: ${result.deletedCount} document deleted`))
+    .catch( err => response.status(500).send(err.message))
+})
