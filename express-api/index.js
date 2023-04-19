@@ -59,3 +59,15 @@ app.delete ('/deleteCourse/:id',(request, response) => {
     .then(result => response.send(`Course deleted: ${result.deletedCount} document deleted`))
     .catch( err => response.status(500).send(err.message))
 })
+
+app.post('/createDatabase/:dbName', (request, response) => {
+    mongo.createDatabase(request.params.dbName)
+    .then(result => response.send(result))
+    .catch( err => response.status(500).send(err.message))
+})
+
+app.post('/createCollection/:dbName/:collectionName', (request, response) => {
+    mongo.createCollection(request.params.dbName, request.params.collectionName)
+    .then(result => response.send(result))
+    .catch( err => response.status(500).send(err.message))
+})
