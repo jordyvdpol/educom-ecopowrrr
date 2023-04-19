@@ -127,7 +127,26 @@ export default class Mongo {
  
       }
 
-      static dropCollection = async() => {
-
-      }
+    static dropCollection = async(dbName, collectionName) => {
+        try {
+            await client.connect()
+            const db = client.db(dbName)
+            const collectionExists = await db.listCollections({ name: collectionName }).hasNext()
+            const collections = await db.listCollections().toArray()
+            const numCollections = collections.length
+            if (collectionExists && numCollections === 1) {
+              await db.dropCollection(collectionName)
+              return `Database ${dbName} dropped together with collection${collectionName}.`
+            } else if (collectionExists && numCollections > 1){
+                await db.dropCollection(collectionName)
+                return `Collection ${collectionName} dropped from ${dbName} database. There are still ${numCollections - 1} collections in the database.`;
+            }else {
+              return `Collection ${collectionName} does not exist in ${dbName} database.`
+            }
+          } catch (err) {
+            throw new Error(err.message)
+          } finally {
+            await client.close()
+          }
+        }
 }

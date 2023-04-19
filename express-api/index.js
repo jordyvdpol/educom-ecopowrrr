@@ -83,3 +83,9 @@ app.delete('/dropDatabase/:dbName', (request, response) => {
     .then(result => response.send(result))
     .catch( err => response.status(500).send(err.message))
 })
+
+app.delete('/dropCollection/:dbName/:collectionName', (request, response) => {
+    mongo.dropCollection(request.params.dbName, request.params.collectionName)
+    .then(result => response.send(result))
+    .catch( err => response.status(500).send(err.message))
+})
