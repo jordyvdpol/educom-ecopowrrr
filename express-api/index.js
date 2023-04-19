@@ -71,3 +71,15 @@ app.post('/createCollection/:dbName/:collectionName', (request, response) => {
     .then(result => response.send(result))
     .catch( err => response.status(500).send(err.message))
 })
+
+app.post('/createDatabase/:dbName', (request, response) => {
+    mongo.createDatabase(request.params.dbName)
+    .then(result => response.send(result))
+    .catch( err => response.status(500).send(err.message))
+})
+
+app.delete('/dropDatabase/:dbName', (request, response) => {
+    mongo.dropDatabase(request.params.dbName)
+    .then(result => response.send(result))
+    .catch( err => response.status(500).send(err.message))
+})

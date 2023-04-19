@@ -106,4 +106,28 @@ export default class Mongo {
             await client.close()
         }
       }
+
+      static dropDatabase = async(dbName) => {
+        try {
+            await client.connect();
+            const db = client.db(dbName)
+            const dbList = await client.db().admin().listDatabases()
+            const dbExists = dbList.databases.some(db => db.name === dbName)
+            if (dbExists) {
+              await db.dropDatabase()
+              return `Database ${dbName} dropped successfully`
+            } else {
+              return `Database ${dbName} does not exist.`
+            }
+          } catch (err) {
+            throw new Error(err.message)
+          } finally {
+            await client.close()
+        }
+ 
+      }
+
+      static dropCollection = async() => {
+
+      }
 }
