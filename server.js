@@ -1,7 +1,8 @@
-import klant from './server_classes.js'
+import klant from './lib/server_classes.js'
 import express from "express"
 const app = express()
-import https from 'https'
+import klantgegevens from './lib/postcode_tech.js'
+
 
 
 const port = 3000
@@ -11,14 +12,15 @@ app.listen(port, () => {
 })
 
 
+
 app.post('/registreerKlant', (request, response) => {
     const postcode = request.query.postcode
     const huisnummer = request.query.huisnummer
     console.log(`postcode: ${postcode}`)
     console.log(`huisnummer: ${huisnummer}`)
-    fetchData(postcode, huisnummer)
+    klantgegevens.ophalenKlantgegevens(postcode, huisnummer)
         .then(klantgegevens => {
-            klant.insert('klantgegevens', klantgegevens)
+            klant.opslaanKlantgegevens('klantgegevens', klantgegevens)
                 .then(insertedID => response.send(`Inserted course with ID: ${insertedID}`))
                 .catch(err => response.status(500).send(err.message))
         })
@@ -28,23 +30,4 @@ app.post('/registreerKlant', (request, response) => {
         });
 });
 
-function fetchData(postcode, huisnummer) {
-    const url = `https://postcode.tech/api/v1/postcode/full?postcode=${postcode}&number=${huisnummer}`;
-    const bearerToken = 'e1f29cae-b9b8-4ddd-b3dd-0fd976394914';
-    console.log(`url: ${url}`)
-  
-    const headers = {
-      'Authorization': `Bearer ${bearerToken}`
-    };
-  
-    return fetch(url, { headers })
-      .then(response => response.json())
-      .then(data => {
-        console.log(`postcode tech data: ${JSON.stringify(data)}`)
-        return data
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error)
-        throw error;
-      });
-}
+
