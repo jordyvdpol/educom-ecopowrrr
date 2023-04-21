@@ -1,10 +1,55 @@
-import backend from './backend_classes.js'
-
+import klant from './lib/backend_classes.js'
+import apparaten from './lib/apparaten.js'
+import status from './lib/klanten.js'
 import express from "express"
+
 const app = express()
 
-app.listen(3000, () => {
+
+
+
+const port = 3000
+
+app.listen(port, () => {
     console.log(`App draait op http://localhost:${port}`)
 })
+
+
+
+// Function to handle the POST request for registering a customer
+app.post('/registreerKlant', klant.registreerKlanten);
+
+
+
+// update klant status in klanten database
+app.put('/updateKlantStatus', (request, response) => {
+    const postcode = request.query.postcode
+    const huisnummer = request.query.huisnummer
+    status.activeerKlantStatus(postcode, huisnummer)
+        .then(result => response.send(`${result.modifiedCount} klant status geupdate`))
+        .catch(err => response.status(500).send(err.message))  
+})
+
+
+
+
+app.post('/maakDummyApparaten', (request, response) => {
+    const postcode = request.query.postcode
+    const huisnummer = request.query.huisnummer
+    apparaten.dummyApparaat('dummyApparaten', postcode, huisnummer)
+        .then(insertedId => {
+            response.send(`Inserted dummy data apparaat with id: ${insertedId}`)
+        })
+        .catch(err => {
+            if (err.message === 'Customer does not exist') {
+                response.status(404).send('Customer not found')
+            } else {
+                response.status(500).send(err.message)
+            }
+        })
+})
+
+
+
 
 
