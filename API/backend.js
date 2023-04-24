@@ -1,6 +1,6 @@
-import klant from './lib/backend_classes.js'
-import apparaten from './lib/apparaten.js'
-import status from './lib/klanten.js'
+import klant from '../../educom-ecopowrrr/API/lib/backend_classes.js'
+import apparaten from '../../educom-ecopowrrr/API/lib/apparaten.js'
+import status from '../../educom-ecopowrrr/API/lib/klanten.js'
 import express from "express"
 
 const app = express()
@@ -48,14 +48,5 @@ app.post('/maakDummyApparaten', (request, response) => {
             }
         })
 })
-
-
-app.get ('/berekenTotalYield', (request, response) => {
-    const klant_id = "64463896d01ee97e06b7fcf4"
-    apparaten.berekenTotalYield(klant_id)
-         .then(result => response.send(result))
-         .catch(err => response.status(404).send(err.message))
-})
-
 
 
