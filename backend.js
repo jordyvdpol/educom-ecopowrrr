@@ -41,8 +41,8 @@ app.post('/maakDummyApparaten', (request, response) => {
             response.send(`Inserted dummy data apparaat with id: ${insertedId}`)
         })
         .catch(err => {
-            if (err.message === 'Customer does not exist') {
-                response.status(404).send('Customer not found')
+            if (err.message === 'Klant bestaat niet') {
+                response.status(404).send('Klant is niet in de database aanwezig')
             } else {
                 response.status(500).send(err.message)
             }
