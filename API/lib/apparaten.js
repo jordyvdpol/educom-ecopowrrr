@@ -7,6 +7,57 @@ const mongoDBKlanten = 'klanten'
 const client = new MongoClient(mongoUrl)
 
 export default class apparaten {
+    static async getLastDummyData (klant_id) {
+        const collection = 'dummyApparaten'
+        const query = klant_id ? {klant_id} : {}
+        console.log(`Bezig met ophalen van alle dummy data van klant ${klant_id}`)
+        try {
+            await client.connect()
+            const data = await client.db(mongoDBApparaat)
+                                    .collection(collection)
+                                    .find(query)
+                                    .toArray()
+            if (data.length > 0) {
+                console.log(` Dummy data voor klant ${klant_id} gevonden`)
+                return data[data.length-1]
+            } else {
+                console.log(`Geen dummy data voor klant ${klant_id} gevonden`)
+                return null
+            }
+        } catch (err) {
+            throw new Error (err.message)
+        } finally {
+            await client.close()
+        }
+    }
+
+
+    static async getAllDummyData () {
+        const collection = 'dummyApparaten'
+        const query = klant_id ? {klant_id} : {}
+        console.log(`Bezig met ophalen van alle dummy data van klant ${klant_id}`)
+        try {
+            await client.connect()
+            const data = await client.db(mongoDBApparaat)
+                                    .collection(collection)
+                                    .find({})
+                                    .toArray()
+            if (data.length > 0) {
+                console.log(` Dummy data voor klant ${klant_id} gevonden`)
+                return data
+            } else {
+                console.log(`Geen dummy data voor klant ${klant_id} gevonden`)
+                return null
+            }
+        } catch (err) {
+            throw new Error (err.message)
+        } finally {
+            await client.close()
+        }
+    }
+
+
+
     static dummyApparaat = async (collection, postcode, huisnummer) => {
         const datum = new Date()
         const maand = datum.getMonth() + 1
@@ -89,9 +140,8 @@ export default class apparaten {
     }
 
 
-    static async haalDummyData (klant_id) {
+    static async historischeDummyData (klant_id) {
         const collection = 'dummyApparaten'
-        console.log('locatie 1')
         const query = klant_id ? {klant_id} : {}
         console.log(`Bezig met ophalen van alle dummy data van klant ${klant_id}`)
         try {
@@ -115,7 +165,7 @@ export default class apparaten {
     }
 
     static async berekenTotalYield (klant_id) {
-        const dataObject = apparaten.haalDummyData(klant_id)
+        const dataObject = apparaten.historischeDummyData(klant_id)
         const dataPromise = await dataObject
         // console.log(dataPromise[0].devices[1].device_total_yield)
         const totalYieldArray = []

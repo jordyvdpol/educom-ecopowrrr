@@ -6,8 +6,6 @@ import express from "express"
 const app = express()
 
 
-
-
 const port = 3000
 
 app.listen(port, () => {
@@ -21,6 +19,8 @@ app.post('/registreerKlant', klant.registreerKlanten);
 
 
 
+
+
 // update klant status in klanten database
 app.put('/updateKlantStatus', (request, response) => {
     const postcode = request.query.postcode
@@ -30,6 +30,11 @@ app.put('/updateKlantStatus', (request, response) => {
         .catch(err => response.status(500).send(err.message))  
 })
 
+app.get('/getKlantData', (request, resposne) =>{
+    status.getKlantData()
+        .then(result => response.send(`Data klanten`) )
+        .catch(err => response.status(500).send(err.message))
+})
 
 
 
@@ -49,4 +54,15 @@ app.post('/maakDummyApparaten', (request, response) => {
         })
 })
 
+app.get('/getLastDummyData', (request, response) => {
+    const klantid = "64463896d01ee97e06b7fcf4"
+    apparaten.getDummyData(klantid)
+        .then(result => response.send(result) )
+        .catch(err => response.status(500).send(err.message))
+})
 
+app.get('/getAllDummyData', (request, response) => {
+    apparaten.getDummyData()
+        .then(result => response.send(result) )
+        .catch(err => response.status(500).send(err.message))
+})
