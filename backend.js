@@ -50,6 +50,12 @@ app.post('/maakDummyApparaten', (request, response) => {
 })
 
 
+app.get ('/haalDummyData', (request, response) => {
+    const klant_id = "64463896d01ee97e06b7fcf4"
+    apparaten.haalDummyData(klant_id)
+         .then(result => response.send(result))
+         .catch(err => response.status(404).send(err.message))
+})
 
 
 
