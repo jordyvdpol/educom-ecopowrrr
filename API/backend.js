@@ -56,13 +56,13 @@ app.post('/maakDummyApparaten', (request, response) => {
 
 app.get('/getLastDummyData', (request, response) => {
     const klantid = "64463896d01ee97e06b7fcf4"
-    apparaten.getDummyData(klantid)
+    apparaten.getLastDummyData(klantid)
         .then(result => response.send(result) )
         .catch(err => response.status(500).send(err.message))
 })
 
 app.get('/getAllDummyData', (request, response) => {
-    apparaten.getDummyData()
+    apparaten.getAllDummyData()
         .then(result => response.send(result) )
         .catch(err => response.status(500).send(err.message))
 })

@@ -34,8 +34,7 @@ export default class apparaten {
 
     static async getAllDummyData () {
         const collection = 'dummyApparaten'
-        const query = klant_id ? {klant_id} : {}
-        console.log(`Bezig met ophalen van alle dummy data van klant ${klant_id}`)
+        console.log(`Bezig met ophalen van alle dummy data van alle klanten`)
         try {
             await client.connect()
             const data = await client.db(mongoDBApparaat)
@@ -43,10 +42,10 @@ export default class apparaten {
                                     .find({})
                                     .toArray()
             if (data.length > 0) {
-                console.log(` Dummy data voor klant ${klant_id} gevonden`)
+                console.log(` Dummy data voor klanten gevonden`)
                 return data
             } else {
-                console.log(`Geen dummy data voor klant ${klant_id} gevonden`)
+                console.log(`Geen dummy data voor klanten gevonden`)
                 return null
             }
         } catch (err) {

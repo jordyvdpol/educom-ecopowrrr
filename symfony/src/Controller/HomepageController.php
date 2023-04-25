@@ -50,7 +50,7 @@ class HomepageController extends AbstractController
 
     #[Route('/data', name:'homepage_save_data')] 
     public function getData(){
-        $data = file_get_contents('http://127.0.0.1:3000/haalDummyData');
+        $data = file_get_contents('http://127.0.0.1:3000/getAllDummyData');
         dd($data);
     }
 
