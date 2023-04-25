@@ -55,6 +55,8 @@ class registreerKlant extends Command{
         $achternaam = $input->getArgument('achternaam') ?: $io->ask('achternaam?');
         $postcode = $input->getArgument('postcode') ?: $io->ask('postcode?');	
         $huisnummer = $input->getArgument('huisnummer') ?: $io->ask('huisnummer?');
+
+        $klant = [$voornaam, $achternaam, $postcode, $huisnummer];
       
             // $this->klantRepository->savePodium($klant);
             return Command::SUCCESS;
