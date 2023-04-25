@@ -19,16 +19,17 @@ use App\Repository\klantRepository;
     name: 'app:registreerKlant',
     description: 'Registreer nieuwe klant in database',
 )]
-class registreerKlantCommand extends Command{
+class registreerKlant extends Command{
 
-    private $klantRepository;
+    // private $klantenRepository;
 
-    public function __construct(klantRepository $klantRepository)
-    {
-        parent::__construct();
+    // public function __construct(klantenRepository $klantenRepository)
+    // {
+    //     parent::__construct();
 
-        $this->klantRepository = $klantRepository;
-    }
+    //     $this->klantenRepository = $klantenRepository;
+    // }
+
 
 
 
@@ -53,7 +54,7 @@ class registreerKlantCommand extends Command{
         $voornaam = $input->getArgument('voornaam') ?: $io->ask('voornaam?');
         $achternaam = $input->getArgument('achternaam') ?: $io->ask('achternaam?');
         $postcode = $input->getArgument('postcode') ?: $io->ask('postcode?');	
-        $huisnummer = $huisnummer->getArgument('huisnummer') ?: $io->ask('huisnummer?');
+        $huisnummer = $input->getArgument('huisnummer') ?: $io->ask('huisnummer?');
       
             // $this->klantRepository->savePodium($klant);
             return Command::SUCCESS;

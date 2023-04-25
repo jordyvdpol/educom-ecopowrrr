@@ -18,7 +18,13 @@ app.listen(port, () => {
 app.post('/registreerKlant', klant.registreerKlanten);
 
 
-
+app.get('/statusKlant', (request, response) =>{
+    const postcode = request.query.postcode
+    const huisnummer = request.query.huisnummer
+    status.klantStatus(postcode, huisnummer)
+        .then(result => resposne.send(result))
+        .catch(err => resposne.status(500).send(err.message))
+})
 
 
 // update klant status in klanten database

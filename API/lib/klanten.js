@@ -7,6 +7,31 @@ const client = new MongoClient(mongoUrl)
 
 export default class status {
 
+
+    static klantStatus = async (postcode, huisnummer) => {
+        const collection = 'status'
+        const query = postcode && huisnummer ? {postcode: String(postcode), huisnummer: String(huisnummer)} : {}
+        console.log(`postcode: ${postcode} and huisnummer: ${huisnummer}`)
+        try {
+            await client.connect()
+            const data = await client.db(mongoDBKlanten)
+                                     .collection(collection)
+                                     .find(query)
+                                     .toArray()
+            if (data.length > 0) {
+                console.log(`Found customer with _id: ${data[0]._id}`)
+                return data[0].status
+            } else {
+                console.log(`No customer found for query: ${JSON.stringify(query)} in database ${mongoDBKlanten} and collection: ${collection}`)
+                return null
+            }
+        } catch (err) {
+            throw new Error (err.message)
+        } finally {
+            await client.close()
+        }
+    }
+
     static maakDummyKlant = async (postcode, huisnummer) => {
         const document = {
             'postcode': postcode,
