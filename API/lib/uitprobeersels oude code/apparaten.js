@@ -56,6 +56,7 @@ export default class apparaten {
     }
 
 
+    
 
     static dummyApparaat = async (collection, postcode, huisnummer) => {
         const datum = new Date()

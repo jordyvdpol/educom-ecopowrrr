@@ -1,6 +1,6 @@
-import klant from '../../educom-ecopowrrr/API/lib/backend_classes.js'
-import apparaten from '../../educom-ecopowrrr/API/lib/apparaten.js'
-import status from '../../educom-ecopowrrr/API/lib/klanten.js'
+// import klant from '../../educom-ecopowrrr/API/lib/backend_classes.js'
+// import apparaten from '../../educom-ecopowrrr/API/lib/apparaten.js'
+// import status from '../../educom-ecopowrrr/API/lib/klanten.js'
 import express from "express"
 
 const app = express()

@@ -84,6 +84,7 @@ class RegistreerKlant extends Command
             $io->error(sprintf('Er is iets misgegaan bij het registreren van de klant: %s', $e->getMessage()));
         }
         
+        
 
         return Command::SUCCESS;
     }
