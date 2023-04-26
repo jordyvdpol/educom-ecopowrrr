@@ -13,10 +13,10 @@ class Klanten
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 12)]
     private ?string $klantnummer = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 20)]
     private ?string $voornaam = null;
 
     #[ORM\Column(length: 100)]
@@ -27,6 +27,15 @@ class Klanten
 
     #[ORM\Column(length: 10)]
     private ?string $huisnummer = null;
+
+    #[ORM\Column(length: 30)]
+    private ?string $stad = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $gemeente = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $provincie = null;
 
     public function getId(): ?int
     {
@@ -89,6 +98,42 @@ class Klanten
     public function setHuisnummer(string $huisnummer): self
     {
         $this->huisnummer = $huisnummer;
+
+        return $this;
+    }
+
+    public function getStad(): ?string
+    {
+        return $this->stad;
+    }
+
+    public function setStad(string $stad): self
+    {
+        $this->stad = $stad;
+
+        return $this;
+    }
+
+    public function getGemeente(): ?string
+    {
+        return $this->gemeente;
+    }
+
+    public function setGemeente(string $gemeente): self
+    {
+        $this->gemeente = $gemeente;
+
+        return $this;
+    }
+
+    public function getProvincie(): ?string
+    {
+        return $this->provincie;
+    }
+
+    public function setProvincie(string $provincie): self
+    {
+        $this->provincie = $provincie;
 
         return $this;
     }

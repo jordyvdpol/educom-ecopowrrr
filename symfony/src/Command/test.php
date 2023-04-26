@@ -3,9 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Klanten;
-use App\Repository\KlantenRepository;
-use App\utilities\PostcodeUtils;
-
+use App\Repository\KlantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -19,20 +17,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:RegistreerKlant',
+    name: 'app:registreer-klant',
     description: 'Registreer nieuwe klant in database',
 )]
-class RegistreerKlant extends Command
+class RegistreerKlantCommand extends Command
 {
     private EntityManagerInterface $entityManager;
-    private KlantenRepository $KlantenRepository;
+    private KlantRepository $klantRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, KlantenRepository $KlantenRepository)
+    public function __construct(EntityManagerInterface $entityManager, KlantRepository $klantRepository)
     {
         parent::__construct();
 
         $this->entityManager = $entityManager;
-        $this->KlantenRepository = $KlantenRepository;
+        $this->klantRepository = $klantRepository;
     }
 
     protected function configure(): void
@@ -59,8 +57,7 @@ class RegistreerKlant extends Command
         $huisnummer = $input->getArgument('huisnummer') ?: $io->ask('Huisnummer?');
 
         // Fetch postcode data
-        $data = PostcodeUtils::fetchPostcodeData($postcode, $huisnummer);
-
+        $data = $this->fetchPostcodeData($postcode, $huisnummer);
 
         $klant = new Klanten();
         $klant->setKlantnummer($klantnummer);
@@ -72,20 +69,33 @@ class RegistreerKlant extends Command
         $klant->setGemeente($data['municipality']);
         $klant->setProvincie($data['province']);
 
-        try {
-            $success = $this->KlantenRepository->save($klant, true);
-            dump($success);
-            if ($success) {
-                $io->success(sprintf('Klant %s %s is geregistreerd', $voornaam, $achternaam));
-            } else {
-                $io->error('Klant is nog niet aan de database toegevoegd');
-            }
-        } catch (\Exception $e) {
-            $io->error(sprintf('Er is iets misgegaan bij het registreren van de klant: %s', $e->getMessage()));
-        }
-        
+        $this->klantRepository->save($klant);
+
+        $io->success(sprintf('Klant %s %s is geregistreerd', $voornaam, $achternaam));
 
         return Command::SUCCESS;
     }
 
+    private function fetchPostcodeData(string $postcode, $huisnummer){
+        $url = 'https://postcode.tech/api/v1/postcode/full?postcode=' . urlencode($postcode) . '&number=' . urlencode($huisnummer);
+        $bearerToken = 'e1f29cae-b9b8-4ddd-b3dd-0fd976394914';
+
+        $headers = [
+            'Authorization: Bearer ' . $bearerToken
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $response = curl_exec($ch);
+        if ($response === false) {
+            throw new Exception('Error fetching data: ' . curl_error($ch));
+        }
+        $data = json_decode($response, true);
+        curl_close($ch);
+        
+        return $data;
+    }
 }

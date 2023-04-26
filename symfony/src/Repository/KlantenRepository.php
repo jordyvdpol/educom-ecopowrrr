@@ -21,16 +21,22 @@ class KlantenRepository extends ServiceEntityRepository
         parent::__construct($registry, Klanten::class);
     }
 
-    public function save(Klanten $entity, bool $flush = false): void
-    {
+    public function save(Klanten $entity, bool $flush = false): bool {
         $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        try { 
+            if ($flush) {
+                $this->getEntityManager()->flush();
+                return true;
+            } 
+        } catch (\Exception $e) {
+            return false;
         }
+        return false;
     }
 
-    public function remove(Klanten $entity, bool $flush = false): void
+
+
+    public function remove(Klanten $enflustity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -38,6 +44,8 @@ class KlantenRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+
 
 //    /**
 //     * @return Klanten[] Returns an array of Klanten objects
