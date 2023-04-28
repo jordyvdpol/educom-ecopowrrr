@@ -15,8 +15,6 @@ class Klanten
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 12)]
-    private ?string $klantnummer = null;
 
     #[ORM\Column(length: 20)]
     private ?string $voornaam = null;
@@ -52,17 +50,7 @@ class Klanten
         return $this->id;
     }
 
-    public function getKlantnummer(): ?string
-    {
-        return $this->klantnummer;
-    }
 
-    public function setKlantnummer(string $klantnummer): self
-    {
-        $this->klantnummer = $klantnummer;
-
-        return $this;
-    }
 
     public function getVoornaam(): ?string
     {

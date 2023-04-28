@@ -5,15 +5,15 @@ const mongodb = 'dummyDataApparaat'
 const client = new MongoClient(mongoUrl)
 
 export default class dummyDataApparaat {
-    static activeerApparaat = async (activeer, klantId, aantal) => {
+    static activeerApparaat = async (status, klantId, aantal) => {
         const collection = 'dummyData'
         const datum = new Date()
-            const maand = datum.getMonth() + 3
+            const maand = datum.getMonth() 
             const dataAanwezigPromise = dummyDataApparaat.checkDataAanwezig(klantId, maand)
             const dataAanwezigObject = await dataAanwezigPromise
             console.log(`${dataAanwezigObject}`)
             
-            if(dataAanwezigObject === false && activeer === 'actief') {
+            if(dataAanwezigObject === false && status === 'actief') {
                 const documentPromise = dummyDataApparaat.maakDummyData(klantId, aantal)
                 const documentObject = await documentPromise
                 console.log(`object: ${documentObject}`)
@@ -22,7 +22,7 @@ export default class dummyDataApparaat {
                     const data = await client.db(mongodb)
                                              .collection(collection)
                                              .insertOne(documentObject)
-                    return data.insertedId
+                    return 'success'
                 } catch (err) {
                     throw new Error(err.message)
                 } finally {
@@ -64,7 +64,7 @@ export default class dummyDataApparaat {
     static async maakDummyData(klantId, aantal) {
         const datum = new Date()
         const jaar =  datum.getFullYear()
-        const maand = datum.getMonth() + 3
+        const maand = datum.getMonth()
         const totalYieldArrayPromise = dummyDataApparaat.berekenTotalYield(klantId, aantal)
         const totalYieldArrayObject = await totalYieldArrayPromise
         console.log(`OPVALLEN ${totalYieldArrayObject}, ${aantal} `)

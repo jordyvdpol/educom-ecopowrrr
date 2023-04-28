@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230428092240 extends AbstractMigration
+final class Version20230428141250 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,13 +20,12 @@ final class Version20230428092240 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-
-        $this->addSql('ALTER TABLE klanten DROP COLUMN klantnummer');
-
+        $this->addSql('ALTER TABLE klanten DROP klantnummer');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE klanten ADD klantnummer VARCHAR(12) NOT NULL');
     }
 }

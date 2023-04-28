@@ -21,14 +21,18 @@ class DummyDataRepository extends ServiceEntityRepository
         parent::__construct($registry, DummyData::class);
     }
 
-    public function save(DummyData $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
+    public function save(DummyData $entity, bool $flush = false): bool {
+    $this->getEntityManager()->persist($entity);
+    try { 
         if ($flush) {
             $this->getEntityManager()->flush();
-        }
+            return true;
+        } 
+    } catch (\Exception $e) {
+        return false;
     }
+    return false;
+}
 
     public function remove(DummyData $entity, bool $flush = false): void
     {

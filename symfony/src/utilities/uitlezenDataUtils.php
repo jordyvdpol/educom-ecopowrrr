@@ -1,8 +1,9 @@
 <?php
 
 namespace App\utilities;
+use Exception;
 
-class uitlezenData
+class uitlezenDataUtils
 {
     public static function uitlezenDummyData($klant_id) {
         $url = 'http://localhost:3000/uitlezenDummyData?id=' . urlencode($klant_id);
@@ -16,10 +17,6 @@ class uitlezenData
             throw new Exception('Error fetching data: ' . curl_error($ch));
         }
 
-        $response = curl_exec($ch);
-        if ($response === false) {
-            throw new Exception('Error fetching data: ' . curl_error($ch));
-        }
         $data = json_decode($response, true);
         curl_close($ch);
         
@@ -31,7 +28,7 @@ class uitlezenData
         foreach ($data['devices'] as $device) {
             $total_yield += (float) $device['device_total_yield'];
             $month_yield += (float) $device['device_month_yield'];
-            $total_surplus += (float) $device['device_total_surpuls'];
+            $total_surplus += (float) $device['device_total_surplus'];
             $month_surplus += (float) $device['device_month_surplus'];
         }
         

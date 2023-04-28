@@ -19,15 +19,14 @@ final class Version20230426063137 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        $this->addSql('ALTER TABLE klanten DROP COLUMN klantnummer');
+
         // this up() migration is auto-generated, please modify it to your needs
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE klant');
-        $this->addSql('DROP TABLE klanten');
-        $this->addSql('DROP TABLE poppodium');
 
 
     }

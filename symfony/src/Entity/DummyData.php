@@ -32,9 +32,6 @@ class DummyData
     #[ORM\Column]
     private ?int $maand = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $devices = null;
-
     #[ORM\Column(nullable: true)]
     private ?float $total_yield = null;
 
@@ -120,18 +117,6 @@ class DummyData
     public function setMaand(int $maand): self
     {
         $this->maand = $maand;
-
-        return $this;
-    }
-
-    public function getDevices(): ?string
-    {
-        return $this->devices;
-    }
-
-    public function setDevices(?string $devices): self
-    {
-        $this->devices = $devices;
 
         return $this;
     }
