@@ -88,7 +88,7 @@ export default class dummyDataApparaat {
             "device_type": "solar",
             "device_total_yield": (maandelijkseOpbrengstZonnepaneel + totalYieldArrayObject[i]),
             "device_month_yield": maandelijkseOpbrengstZonnepaneel,
-            "device_total_surpuls": 0,
+            "device_total_surplus": 0,
             "device_month_surplus": 0,
             };
             dummyData.devices.push(device);

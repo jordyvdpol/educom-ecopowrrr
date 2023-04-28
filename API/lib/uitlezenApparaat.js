@@ -19,7 +19,7 @@ export default class uitlezenApparaat {
                                     .toArray()
             if (data.length > 0) {
                 console.log(`Data voor klant ${klantId} uitgelezen`)
-                return data
+                return data[data.length-1]
             } else {
                 console.log(`Geen dummy data voor klant ${klantId} gevonden met status ${status}`)
                 return data
