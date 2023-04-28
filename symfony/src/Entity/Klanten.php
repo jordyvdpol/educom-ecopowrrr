@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\KlantenRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: KlantenRepository::class)]
@@ -36,6 +38,14 @@ class Klanten
 
     #[ORM\Column(length: 100)]
     private ?string $provincie = null;
+
+    #[ORM\OneToMany(mappedBy: 'klantnummer', targetEntity: DummyData::class)]
+    private Collection $test;
+
+    public function __construct()
+    {
+        $this->test = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -134,6 +144,36 @@ class Klanten
     public function setProvincie(string $provincie): self
     {
         $this->provincie = $provincie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DummyData>
+     */
+    public function getTest(): Collection
+    {
+        return $this->test;
+    }
+
+    public function addTest(DummyData $test): self
+    {
+        if (!$this->test->contains($test)) {
+            $this->test->add($test);
+            $test->setKlantnummer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTest(DummyData $test): self
+    {
+        if ($this->test->removeElement($test)) {
+            // set the owning side to null (unless already changed)
+            if ($test->getKlantnummer() === $this) {
+                $test->setKlantnummer(null);
+            }
+        }
 
         return $this;
     }

@@ -59,7 +59,7 @@ class RegistreerKlant extends Command
         $huisnummer = $input->getArgument('huisnummer') ?: $io->ask('Huisnummer?');
 
         // Fetch postcode data
-        $data = PostcodeUtils::fetchPostcodeData($postcode, $huisnummer);
+        $postcodeData = PostcodeUtils::fetchPostcodeData($postcode, $huisnummer);
 
 
         $klant = new Klanten();
@@ -68,9 +68,9 @@ class RegistreerKlant extends Command
         $klant->setAchternaam($achternaam);
         $klant->setPostcode($postcode);
         $klant->setHuisnummer($huisnummer);
-        $klant->setStad($data['city']);
-        $klant->setGemeente($data['municipality']);
-        $klant->setProvincie($data['province']);
+        $klant->setStad($postcodeData['city']);
+        $klant->setGemeente($postcodeData['municipality']);
+        $klant->setProvincie($postcodeData['province']);
 
         try {
             $success = $this->KlantenRepository->save($klant, true);
@@ -83,6 +83,9 @@ class RegistreerKlant extends Command
         } catch (\Exception $e) {
             $io->error(sprintf('Er is iets misgegaan bij het registreren van de klant: %s', $e->getMessage()));
         }
+
+        // Fetch dummy data apparaat
+        $dummyData = dummyDataUtils::uitlezenDummyData($klantnummer);
         
         
 

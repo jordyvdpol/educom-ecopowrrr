@@ -20,8 +20,7 @@ app.post('/activeerKlant', (request, response) => {
 
 app.get('/uitlezenDummyData', (request, response) => {
     const klantId = request.query.id
-    const status = 'actief'
-    uitlezenApparaat.uitlezenDummyData(status, klantId)
+    uitlezenApparaat.uitlezenDummyData(klantId)
         .then(result => response.send(result))
         .catch(err => response.status(500).send(err.message))
 })

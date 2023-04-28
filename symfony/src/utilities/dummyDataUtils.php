@@ -25,6 +25,9 @@ class uitlezenData
         
         return $data;
     
+        //functie test command line:
+        // php -r "require '/Applications/XAMPP/xamppfiles/htdocs/educom-ecopowrrr/symfony/src/utilities/dummyDataUtils.php'; echo json_encode(App\utilities\uitlezenData::uitlezenDummyData('7'));"
+
     }
 }
 

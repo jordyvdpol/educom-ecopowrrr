@@ -5,8 +5,9 @@ const client = new MongoClient(mongoUrl)
 
 export default class uitlezenApparaat {
 
-    static async uitlezenDummyData (status, klantId) {
+    static async uitlezenDummyData (klantId) {
         const collection = 'dummyData'
+        const status = 'actief'
         const query = status && klantId ? {status: 'actief', klantId: klantId} : {}
         console.log(`Bezig met ophalen van dummy data van klant ${klantId}`)
         console.log(`${status}`)
@@ -17,10 +18,10 @@ export default class uitlezenApparaat {
                                     .find(query)
                                     .toArray()
             if (data.length > 0) {
-                console.log(`Historische dummy data voor klant ${klantId} gevonden`)
+                console.log(`Data voor klant ${klantId} uitgelezen`)
                 return data
             } else {
-                console.log(`Geen historische dummy data voor klant ${klantId} gevonden met status ${status}`)
+                console.log(`Geen dummy data voor klant ${klantId} gevonden met status ${status}`)
                 return data
             }
         } catch (err) {
