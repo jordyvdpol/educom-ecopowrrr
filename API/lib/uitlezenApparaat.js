@@ -7,7 +7,7 @@ export default class uitlezenApparaat {
 
     static async uitlezenDummyData (status, klantId) {
         const collection = 'dummyData'
-        const query = status && klantId ? {status: status, klantId: klantId} : {}
+        const query = status && klantId ? {status: 'actief', klantId: klantId} : {}
         console.log(`Bezig met ophalen van dummy data van klant ${klantId}`)
         console.log(`${status}`)
         try {
