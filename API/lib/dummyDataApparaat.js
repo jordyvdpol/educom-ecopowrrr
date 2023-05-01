@@ -8,7 +8,7 @@ export default class dummyDataApparaat {
     static activeerApparaat = async (status, klantId, aantal) => {
         const collection = 'dummyData'
         const datum = new Date()
-            const maand = datum.getMonth() 
+            const maand = datum.getMonth() +2
             const dataAanwezigPromise = dummyDataApparaat.checkDataAanwezig(klantId, maand)
             const dataAanwezigObject = await dataAanwezigPromise
             console.log(`${dataAanwezigObject}`)
@@ -64,9 +64,11 @@ export default class dummyDataApparaat {
     static async maakDummyData(klantId, aantal) {
         const datum = new Date()
         const jaar =  datum.getFullYear()
-        const maand = datum.getMonth()
+        const maand = datum.getMonth()+2
         const totalYieldArrayPromise = dummyDataApparaat.berekenTotalYield(klantId, aantal)
         const totalYieldArrayObject = await totalYieldArrayPromise
+        const totalSurplusPromise = dummyDataApparaat.berekenTotalSurplus(klantId, aantal)
+        const totalSurplusObject = await totalSurplusPromise
         console.log(`OPVALLEN ${totalYieldArrayObject}, ${aantal} `)
         const randomString = crypto.randomBytes(5).toString('hex')
         const dummyData = {
@@ -82,14 +84,15 @@ export default class dummyDataApparaat {
         for (let i = 0; i < aantal; i++) {
             const randomString = crypto.randomBytes(5).toString('hex')
             const maandelijkseOpbrengstZonnepaneel = dummyDataApparaat.maandelijkseOpbrengstZonnepaneel(maand)
+            const maandelijkseOverschotZonnepaneel = dummyDataApparaat.maandelijkseOverschotZonnepaneel(maand)
 
             const device = { 
             "serial_number":  randomString,
             "device_type": "solar",
             "device_total_yield": (maandelijkseOpbrengstZonnepaneel + totalYieldArrayObject[i]),
             "device_month_yield": maandelijkseOpbrengstZonnepaneel,
-            "device_total_surplus": 0,
-            "device_month_surplus": 0,
+            "device_total_surplus": maandelijkseOverschotZonnepaneel + totalSurplusObject[i],
+            "device_month_surplus": maandelijkseOverschotZonnepaneel,
             };
             dummyData.devices.push(device);
         }
@@ -118,6 +121,27 @@ export default class dummyDataApparaat {
         return gemiddeldeMaandelijkseOpbrengst
     }
 
+    static maandelijkseOverschotZonnepaneel(maand) {
+        const maandelijkseOpbrengstPercentages = {
+            "1": 0.03,
+            "2": 0.05,
+            "3": 0.08,
+            "4": 0.12,
+            "5": 0.13,
+            "6": 0.13,
+            "7": 0.13,
+            "8": 0.11,
+            "9": 0.10,
+            "10": 0.07,
+            "11": 0.03,
+            "12": 0.02,
+        }
+        const maandelijkseOpbrengstPercentage = maandelijkseOpbrengstPercentages[maand]
+        const maandelijkseOverschot = maandelijkseOpbrengstPercentage * 80
+        const gemiddeldeMaandelijkseOverschot =  (Math.floor(Math.random() * ((maandelijkseOverschot+3) - (maandelijkseOverschot-3) + 1)) + (maandelijkseOverschot-3))
+        return gemiddeldeMaandelijkseOverschot
+    }
+
     static async berekenTotalYield(klantId, aantal) {
         const dataPromise = dummyDataApparaat.historischeDummyData(klantId);
         const dataObject = await dataPromise;
@@ -144,6 +168,35 @@ export default class dummyDataApparaat {
         }
         console.log(`array met total opbrengst voor ieder paneel [${totalYieldArray}]`);
         return totalYieldArray;
+    }
+
+
+    static async berekenTotalSurplus(klantId, aantal) {
+        const dataPromise = dummyDataApparaat.historischeDummyData(klantId);
+        const dataObject = await dataPromise;
+        console.log(aantal)
+        if(dataObject === false){
+    
+            const totalSurplusArray = new Array(3).fill(0);
+            console.log(`ARRRRRR: ${totalSurplusArray} en aantal: ${aantal}`)
+            return totalSurplusArray
+        } 
+        
+        
+        const devicesLength = dataObject[0].devices.length;
+        console.log(devicesLength);  
+        const totalSurplusArray = [];
+        let i = 0;
+        for (i = 0; i < devicesLength; i++) {
+            let total = 0;
+            dataObject.forEach((data, index) => {
+                total += data.devices[i].device_total_surplus;
+                console.log(`i: ${i}, data: ${data.devices[i].device_total_yield}`)
+            });
+            totalSurplusArray.push(total);
+        }
+        console.log(`array met total opbrengst voor ieder paneel [${totalSurplusArray}]`);
+        return totalSurplusArray;
     }
     
       
