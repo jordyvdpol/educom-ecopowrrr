@@ -1,17 +1,11 @@
 <?php
-
 namespace App\Command;
 
-use App\Entity\Klanten;
-use App\Entity\DummyData;
-
-use App\Repository\KlantenRepository;
-use App\Repository\DummyDataRepository;
-
+use App\Service\KlantenService;
+use App\Service\DummyDataService;
 use App\utilities\PostcodeUtils;
 use App\utilities\activeerDummyApparaatUtils;
 use App\utilities\uitlezenDataUtils;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,7 +16,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-
 #[AsCommand(
     name: 'app:RegistreerKlant',
     description: 'Registreer nieuwe klant in database',
@@ -30,18 +23,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class RegistreerKlant extends Command
 {
     private EntityManagerInterface $entityManager;
-    private KlantenRepository $KlantenRepository;
     private DummyDataRepository $DummyDataRepository;
 
-
-    public function __construct(EntityManagerInterface $entityManager, KlantenRepository $KlantenRepository, DummyDataRepository $DummyDataRepository)
+    public function __construct(EntityManagerInterface $entityManager, DummyDataService $DummyDataService, KlantenService $KlantenService)
     {
         parent::__construct();
-
-        $this->entityManager = $entityManager;
-        $this->KlantenRepository = $KlantenRepository;
-        $this->DummyDataRepository = $DummyDataRepository;
-
+        $this -> entityManager = $entityManager;
+        $this -> DummyDataService = $DummyDataService;
+        $this -> KlantenService = $KlantenService;
     }
 
     protected function configure(): void
@@ -68,69 +57,31 @@ class RegistreerKlant extends Command
 
         // Fetch postcode data
         $postcodeData = PostcodeUtils::fetchPostcodeData($postcode, $huisnummer);
+        
+        // Voeg klant aan database toe
+        $klantData = [
+            'voornaam' => $voornaam,
+            'achternaam' => $achternaam,
+            'postcode' => $postcode,
+            'huisnummer' => $huisnummer,
+            'stad' => $postcodeData['city'],
+            'gemeente' => $postcodeData['municipality'],
+            'provincie' => $postcodeData['province']
+        ];
 
-
-        $klant = new Klanten();
-        $klant->setVoornaam($voornaam);
-        $klant->setAchternaam($achternaam);
-        $klant->setPostcode($postcode);
-        $klant->setHuisnummer($huisnummer);
-        $klant->setStad($postcodeData['city']);
-        $klant->setGemeente($postcodeData['municipality']);
-        $klant->setProvincie($postcodeData['province']);
-
-        try {
-            $success = $this->KlantenRepository->save($klant, true);
-            dump($success);
-            if ($success) {
-                $io->success(sprintf('Klant %s %s is geregistreerd', $voornaam, $achternaam));
-                $klantId = $klant->getId();
-                $io->writeln(sprintf('Klant ID: %d', $klantId));
-            } else {
-                $io->error('Klant is nog niet aan de database toegevoegd');
-            }
-        } catch (\Exception $e) {
-            $io->error(sprintf('Er is iets misgegaan bij het registreren van de klant: %s', $e->getMessage()));
-        }
-
-
-
+        $klantId = $this-> KlantenService->registreerKlanten($klantData);
+        $io->section(sprintf('Succes: klant met ID %d is toegevoegd aan de database', $klantId));
+        
         // Activeer apparaat
         activeerDummyApparaatUtils::activatiebericht('actief', $klantId, $aantal);
 
         // Fetch dummy data apparaat
         $dummyData = uitlezenDataUtils::uitlezenDummyData($klantId);
-        $data = new DummyData();
-        
-        $klantRepository = $this -> entityManager -> getRepository(Klanten::class);
-        $klantnummer = $klantRepository->find($klantId);
 
-
-        $data -> setKlantnummer($klantnummer);
-        $data -> setMessageId($dummyData['message_id']);
-        $data -> setStatus($dummyData['status']);
-        $data -> setDate($dummyData['date']);
-        $data -> setJaar($dummyData['jaar']);
-        $data -> setMaand($dummyData['maand']);
-        $data -> setTotalYield($dummyData['total_yield']);
-        $data -> setMonthYield($dummyData['month_yield']);
-        $data -> setTotalSurplus($dummyData['total_surplus']);
-        $data -> setMonthSurplus($dummyData['month_surplus']);
-
-        try {
-            $success = $this->DummyDataRepository->save($data, true);
-            dump($success);
-            if ($success) {
-                $io->success(sprintf('Data van klant %s %s is succesvol opgehaald en opgeslagen', $voornaam, $achternaam));
-            } else {
-                $io->error('Data is niet aan de database toegevoegd');
-            }
-        } catch (\Exception $e) {
-            $io->error(sprintf('Er is iets misgegaan bij het registreren van de klant: %s', $e->getMessage()));
-        }
-        
+        // Dummy data ophalen en opslaan in database
+        $result = $this -> DummyDataService->registreerDummyData($dummyData, $klantId);
+        $io->section($result);
 
         return Command::SUCCESS;
     }
-
 }
