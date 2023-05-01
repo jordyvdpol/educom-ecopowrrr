@@ -20,21 +20,19 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'app:RegistreerKlant',
     description: 'Registreer nieuwe klant in database',
 )]
-class RegistreerKlant extends Command
-{
+class RegistreerKlant extends Command{
     private EntityManagerInterface $entityManager;
-    private DummyDataRepository $DummyDataRepository;
+    private DummyDataService $DummyDataService;
+    private KlantenService $KlantenService;
 
-    public function __construct(EntityManagerInterface $entityManager, DummyDataService $DummyDataService, KlantenService $KlantenService)
-    {
+    public function __construct(EntityManagerInterface $entityManager, DummyDataService $DummyDataService, KlantenService $KlantenService) {
         parent::__construct();
         $this -> entityManager = $entityManager;
         $this -> DummyDataService = $DummyDataService;
         $this -> KlantenService = $KlantenService;
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void{
         $this
             ->setDescription('Registreer nieuwe klant in database')
             ->addArgument('voornaam', InputArgument::OPTIONAL, 'Voornaam')
@@ -45,8 +43,7 @@ class RegistreerKlant extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int{
         $io = new SymfonyStyle($input, $output);
         $io->title('Klant registratie');
         $voornaam = $input->getArgument('voornaam') ?: $io->ask('Voornaam?');

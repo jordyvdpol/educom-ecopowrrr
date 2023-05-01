@@ -21,13 +21,17 @@ class PrijsRepository extends ServiceEntityRepository
         parent::__construct($registry, Prijs::class);
     }
 
-    public function save(Prijs $entity, bool $flush = false): void
-    {
+    public function save(Prijs $entity, bool $flush = false): bool {
         $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        try { 
+            if ($flush) {
+                $this->getEntityManager()->flush();
+                return true;
+            } 
+        } catch (\Exception $e) {
+            return false;
         }
+        return false;
     }
 
     public function remove(Prijs $entity, bool $flush = false): void
