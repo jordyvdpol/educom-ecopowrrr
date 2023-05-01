@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "chart.js": "^4.3.0",
+    "regression": "^2.0.1"
+  }
+}
