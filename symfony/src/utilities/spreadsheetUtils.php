@@ -1,30 +1,30 @@
 <?php
 namespace App\utilities;
-require 'vendor\autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class spreadsheetUtils {
-    public static function maakSpreadsheet(){
-        $spreadsheet = new Spreadsheet();
-        $worksheet = $spreadsheet->getActiveSheet();
+  public static function maakSpreadsheet() {
+    $spreadsheet = new Spreadsheet();
+    $worksheet = $spreadsheet->getActiveSheet();
 
-        $worksheet->setCellValue('A1', 'Name')
-          ->setCellValue('B1', 'Email')
-          ->setCellValue('A2', 'John Doe')
-          ->setCellValue('B2', 'john.doe@example.com');
+    $worksheet->setCellValue('A1', 'Name')
+      ->setCellValue('B1', 'Email')
+      ->setCellValue('A2', 'John Doe')
+      ->setCellValue('B2', 'john.doe@example.com');
 
-        $response = new \Symfony\Component\HttpFoundation\StreamedResponse();
+      $writer = new Xlsx($spreadsheet);
+      $filename = 'C:\xampp\htdocs\educom-ecopowrrr\symfony\tests\example.xlsx';
+      $writer->save($filename);
+      if (file_exists($filename)) {
+          echo "Excel file generated successfully at $filename";
+      } else {
+          echo "Error generating Excel file";
+      }
 
-        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment;filename="example.xlsx"');
-
-        $response->setCallback(function () use ($spreadsheet) {
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('test.xlsx');
-        });
-        return $response;
-    }
+    return;
+  }
 }
 
 // functie test command line:

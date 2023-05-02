@@ -50,6 +50,15 @@ class DummyDataService  {
     }
 
 
+    public function ophalenKlantData () {
+
+        $DummyDataRepository = $this -> entityManager -> getRepository(DummyData::class);
+        $data = $DummyDataRepository->findAll();
+        
+
+        return $data;
+    }
+
 
 }
 
