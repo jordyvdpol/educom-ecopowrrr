@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 class KlantenService {
     private $KlantenRepository;
     
-
     public function __construct(EntityManagerInterface $entityManager, KlantenRepository $KlantenRepository)
     {
         $this->entityManager = $entityManager;
@@ -84,6 +83,7 @@ class KlantenService {
                 $result[] = $klantData;
             }
         }
+        dump($result);
         return $result;
     }
     
