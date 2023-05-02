@@ -45,6 +45,13 @@ class KlantenRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllById(){
+        return $this -> createQueryBuilder('d')
+            ->select('d.id')
+            ->getQuery()
+            ->getResult();
+    }
+
 
 
 //    /**

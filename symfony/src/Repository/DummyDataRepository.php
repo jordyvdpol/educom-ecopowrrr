@@ -44,6 +44,25 @@ class DummyDataRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function findAllKlantnummer($value): array
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.klantnummer = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findAllById(){
+        return $this -> createQueryBuilder('d')
+            ->select('d.id')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return DummyData[] Returns an array of DummyData objects
 //     */
@@ -68,4 +87,9 @@ class DummyDataRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
 }
+
+
+    

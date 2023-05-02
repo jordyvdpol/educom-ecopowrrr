@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Klanten;
 use App\Repository\KlantenRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 
 class KlantenService {
@@ -15,6 +16,8 @@ class KlantenService {
     {
         $this->entityManager = $entityManager;
         $this->KlantenRepository = $KlantenRepository;
+        $this->metadata = $this->entityManager->getClassMetadata(Klanten::class);
+
     }
 
     public function getKlant($klantId) {
@@ -49,6 +52,41 @@ class KlantenService {
             return (sprintf('Er is iets misgegaan bij het registreren van de klant: %s', $e->getMessage()));
         }
     }
+
+    public function loopData($data) {
+        $result = [];
+    
+        foreach ($this->metadata->fieldMappings as $key => $mapping) {
+            $type = $mapping['type'];
+            $func = 'get' . ucwords(str_replace('_', '', $key));
+    
+            if (method_exists($data, $func)) {
+                $value = $data->$func();
+                $result[$key] = $value;
+            }
+        }
+        return $result;      
+    }
+    
+
+    public function getAllKlantenData() {
+        $data = $this->KlantenRepository->findAllById();
+        $id =[];
+        $result = [];
+        foreach ($data as $key){
+            array_push($id, $key['id']);
+            dump($key['id']);
+            $data = $this -> KlantenRepository->find($key['id']);
+            if (!$data) {
+                $result[] = 'no data available';
+            }else {
+                $klantData = KlantenService::loopData($data);
+                $result[] = $klantData;
+            }
+        }
+        return $result;
+    }
+    
 }
 
 

@@ -6,18 +6,23 @@ use App\Entity\DummyData;
 use App\Repository\DummyDataRepository;
 use App\Entity\Klanten;
 use App\Repository\KlantenRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Doctrine\ORM\EntityManagerInterface;
 
 class DummyDataService  {
     private $KlantenRepository;
     private $DummyDataRepository;
+    private ClassMetadata $metadata;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager, DummyDataRepository $DummyDataRepository, KlantenRepository $KlantenRepository)
     {
         $this->entityManager = $entityManager;
         $this->DummyDataRepository = $DummyDataRepository;
         $this->KlantenRepository = $KlantenRepository;
+        $this->metadata = $this->entityManager->getClassMetadata(DummyData::class);
+
     }
 
     public function registreerDummyData ($dummyData, $klantId) {
@@ -51,15 +56,46 @@ class DummyDataService  {
 
 
     public function ophalenKlantData () {
-
         $DummyDataRepository = $this -> entityManager -> getRepository(DummyData::class);
         $data = $DummyDataRepository->findAll();
-        
-
         return $data;
     }
 
 
+    public function loopData($data) {
+        $result = [];
+    
+        foreach ($this->metadata->fieldMappings as $key => $mapping) {
+            $type = $mapping['type'];
+            $func = 'get' . ucwords(str_replace('_', '', $key));
+    
+            if (method_exists($data, $func)) {
+                $value = $data->$func();
+                $result[$key] = $value;
+            }
+        }
+        return $result;      
+    }
+    
+
+    public function getAllDummyData() {
+        $data = $this->DummyDataRepository->findAllById();
+        $id =[];
+        $result = [];
+        foreach ($data as $key){
+            array_push($id, $key['id']);
+            dump($key['id']);
+            $data = $this -> DummyDataRepository->find($key['id']);
+            if (!$data) {
+                $result[] = 'no data available';
+            }else {
+                $dummyData = DummyDataService::loopData($data);
+                $result[] = $dummyData;
+            }
+        }
+        return $result;
+    }
 }
+
 
 ?>

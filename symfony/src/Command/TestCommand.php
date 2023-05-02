@@ -37,22 +37,17 @@ class TestCommand extends Command{
     }
     
     protected function configure(): void{
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int{
         $io = new SymfonyStyle($input, $output);
         $io->title('Test Functie');
 
-        $data = $this -> DummyDataService -> ophalenKlantData();
+        $data = $this -> DummyDataService -> getAllDummyData();
         // $data = DummyDataService::ophalenKlantData();
-        dd($data);
-
-        $io->section(sprintf('Succes: %d ', $data));
-
-       $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        dump ($data);
+        $io->success('Success.');
 
         return Command::SUCCESS;
-    
     }
 }
