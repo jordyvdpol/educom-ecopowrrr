@@ -74,7 +74,6 @@ class KlantenService {
         $result = [];
         foreach ($data as $key){
             array_push($id, $key['id']);
-            dump($key['id']);
             $data = $this -> KlantenRepository->find($key['id']);
             if (!$data) {
                 $result[] = 'no data available';
@@ -83,9 +82,10 @@ class KlantenService {
                 $result[] = $klantData;
             }
         }
-        dump($result);
         return $result;
     }
+
+
     
 }
 

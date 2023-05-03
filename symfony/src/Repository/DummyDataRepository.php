@@ -55,6 +55,16 @@ class DummyDataRepository extends ServiceEntityRepository
         ;
     }
 
+    // public function findAllById()
+    // {
+    //     $qb = $this->createQueryBuilder('d')
+    //                ->select('d', 'f') // include foreign entity
+    //                ->leftJoin('d.klantnummer', 'f');
+    //     return $qb->getQuery()->getArrayResult();
+    // }
+    
+
+
     public function findAllById(){
         return $this -> createQueryBuilder('d')
             ->select('d.id')

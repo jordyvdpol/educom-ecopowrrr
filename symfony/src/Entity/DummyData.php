@@ -8,6 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DummyDataRepository::class)]
 class DummyData
 {
+
+    // #[ORM\ManyToOne(targetEntity: RelatedData::class)]
+    // #[ORM\JoinColumn(name: "related_data_id", referencedColumnName: "id")]
+    // private $relatedData;
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

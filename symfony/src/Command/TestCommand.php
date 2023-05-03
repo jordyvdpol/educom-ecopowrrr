@@ -43,7 +43,7 @@ class TestCommand extends Command{
         $io = new SymfonyStyle($input, $output);
         $io->title('Test Functie');
 
-        $data = $this -> DummyDataService -> getAllDummyData();
+        $data = $this -> DummyDataService -> calcJaarlijkseOmzet();
         // $data = DummyDataService::ophalenKlantData();
         dump ($data);
         $io->success('Success.');

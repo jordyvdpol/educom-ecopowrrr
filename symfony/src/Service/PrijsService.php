@@ -14,13 +14,18 @@ class PrijsService {
     }
 
     public function registreerPrijs($prijsData) {
-        $prijs = new Prijs();
-
-        $prijs -> setJaar ($prijsData['jaar']);
-        $prijs -> setMaand ($prijsData['maand']);
-        $prijs -> setInkoopPrijsKwH ($prijsData['inkoop_prijs_KwH']);
-        $prijs -> setVerkoopPrijsKwH ($prijsData['verkoop_prijs_KwH']);
-
+        $jaar = $prijsData['jaar'];
+        $maand = $prijsData['maand'];
+        $existingPrijs = $this->PrijsRepository->findOneBy(['jaar' => $jaar, 'maand' => $maand]);
+        if (!$existingPrijs) {
+            $prijs = new Prijs();
+            $prijs->setJaar($jaar);
+            $prijs->setMaand($maand);
+        } else {
+            $prijs = $existingPrijs;
+        }
+        $prijs->setInkoopPrijsKwH($prijsData['inkoop_prijs_KwH']);
+        $prijs->setVerkoopPrijsKwH($prijsData['verkoop_prijs_KwH']);
         try {
             $success = $this->PrijsRepository->save($prijs, true);
             if ($success) {
@@ -31,6 +36,24 @@ class PrijsService {
         } catch (\Exception $e) {
             return (sprintf('Er is iets misgegaan bij het registreren van de prijs data: %s', $e->getMessage()));
         }
+    }
+    
+
+
+    public function getAllPrijsData() {
+        $prijsData = $this->PrijsRepository->findAll();
+        $prijsDataArray = [];
+        foreach ($prijsData as $data) {
+            $dataArray = [
+                'id' => $data->getId(),
+                'jaar' => $data->getJaar(),
+                'maand' => $data->getMaand(),
+                'inkoopPrijsKwH' => $data->getInkoopPrijsKwH(),
+                'verkoopPrijsKwH' => $data->getVerkoopPrijsKwH()
+            ];
+            $prijsDataArray[] = $dataArray;
+        }
+        return $prijsDataArray;
     }
         
 }
