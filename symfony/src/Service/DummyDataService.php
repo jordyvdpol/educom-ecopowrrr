@@ -60,39 +60,27 @@ class DummyDataService  {
         }
     }
 
-
     public function ophalenKlantData () {
         $DummyDataRepository = $this -> entityManager -> getRepository(DummyData::class);
         $data = $DummyDataRepository->findAll();
         return $data;
     }
 
-
     public function loopData($data) {
         $result = [];
-        
-    
         foreach ($this->metadata->fieldMappings as $key => $mapping) {
             dd($this->metadata->fieldMappings);
-
             $type = $mapping['type'];
             $func = 'get' . ucwords(str_replace('_', '', $key));
-    
             if (method_exists($data, $func)) {
                 $value = $data->$func();
-
-    
-                // related entity
                 if ($type === 'entity' && $value !== null) {
                     $value = $value->getId();
                     dd($value);
                 }
-                
-    
                 $result[$key] = $value;
             }
         }
-    
         return $result;
     }
 
@@ -139,8 +127,12 @@ class DummyDataService  {
         return $dummyDataArray;
     }
 
-    public function calcMaandelijkseOmzet(){
-        $allDummyData = DummyDataService::getAllDummyData();
+    public function calcMaandelijkseOmzetKlant($data = null){
+        if ($data === null) {
+            $allDummyData = DummyDataService::getAllDummyData();
+        } else {
+            $allDummyData = $data;
+        }
         $allPrijsData = $this->PrijsService->getAllPrijsData();
         $allKlantenData = $this-> KlantenService -> getAllKlantenData();
 
@@ -153,7 +145,6 @@ class DummyDataService  {
             $verkoopPrijs = null;
             $klant = $this -> KlantenRepository -> findOneBy(['id' => $klantnummer]);
             $gemeente = $klant -> getGemeente();
-            
             foreach ($allPrijsData as $maandPrijsData) {
                 if ($maandPrijsData['jaar'] == $jaar && $maandPrijsData['maand'] == $maand) {
                     $verkoopPrijs = $maandPrijsData['verkoopPrijsKwH'];
@@ -174,7 +165,7 @@ class DummyDataService  {
     }
 
     public function calcJaarlijkseOmzetKlant(){
-        $maandelijkseOmzet = DummyDataService::calcMaandelijkseOmzet();
+        $maandelijkseOmzet = DummyDataService::calcMaandelijkseOmzetKlant();
         $result = [];
         $omzetTotal = 0;
         $KwHTotal = 0;
@@ -219,6 +210,51 @@ class DummyDataService  {
             }
         }
         // dd($result);
+        return $result;
+    }
+
+    public function calcMaandelijkseOmzet(){
+        $huidigJaar = date('Y');
+        $maandelijkseOmzetKlant = DummyDataService::calcMaandelijkseOmzetKlant();
+        $result = [];
+        foreach($maandelijkseOmzetKlant as $klant){
+            foreach($klant as $jaarId => $jaar ){
+                foreach($jaar as $maandId => $maand){
+                    if(!isset($result[$jaarId][$maandId])){
+                        $result[$jaarId][$maandId] = [
+                            'omzet' => 0,
+                            'winst' => 0,
+                            'KwH' => 0
+                        ];
+                    }
+                    $result[$jaarId][$maandId]['omzet'] += $maand['omzet'];
+                    $result[$jaarId][$maandId]['winst'] += $maand['winst'];
+                    $result[$jaarId][$maandId]['KwH'] += $maand['KwH'];
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function calcJaarlijkseOmzet(){
+        $huidigJaar = date('Y');
+        $maandelijkseOmzet = DummyDataService::calcMaandelijkseOmzet();
+        $result = [];
+        foreach($maandelijkseOmzet as $jaarId => $jaar){
+            foreach($jaar as $maand){
+                if(!isset($result[$jaarId])){
+                    $result[$jaarId] = [
+                        'omzet' => 0,
+                        'winst' => 0,
+                        'KwH' => 0
+                    ];
+                $result[$jaarId]['omzet'] += $maand['omzet'];
+                $result[$jaarId]['winst'] += $maand['winst'];
+                $result[$jaarId]['KwH'] += $maand['KwH'];
+                }
+            }
+        }
+        dd($result);
         return $result;
     }
     

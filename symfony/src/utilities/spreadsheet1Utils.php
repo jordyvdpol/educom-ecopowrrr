@@ -47,7 +47,6 @@ class spreadsheet1Utils {
       ->setCellValue('J1', 'ingekochte KwH')
       ;
  
-
     $rowCount = 2;
     foreach ($klantData as $klant) {
       foreach ($klant as $key => $value) {
@@ -82,16 +81,14 @@ class spreadsheet1Utils {
     ];
     $worksheet->getStyle('A2:J'.$rowCount)->applyFromArray($contentStyle);
 
-    
-
-      $writer = new Xlsx($spreadsheet);
-      $filename = '/Applications/XAMPP/xamppfiles/htdocs/educom-ecopowrrr/symfony/spreadsheets/example.xlsx';
-      $writer->save($filename);
-      if (file_exists($filename)) {
-          echo "Excel file generated successfully at $filename";
-      } else {
-          echo "Error generating Excel file";
-      }
+    $writer = new Xlsx($spreadsheet);
+    $filename = '/Applications/XAMPP/xamppfiles/htdocs/educom-ecopowrrr/symfony/spreadsheets/example.xlsx';
+    $writer->save($filename);
+    if (file_exists($filename)) {
+        echo "Excel file generated successfully at $filename";
+    } else {
+        echo "Error generating Excel file";
+    }
 
     return;
   }

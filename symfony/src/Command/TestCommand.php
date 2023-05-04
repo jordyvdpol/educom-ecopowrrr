@@ -1,5 +1,5 @@
 <?php
-
+// Command om functies te testen
 namespace App\Command;
 
 use App\Service\KlantenService;
@@ -43,7 +43,7 @@ class TestCommand extends Command{
         $io = new SymfonyStyle($input, $output);
         $io->title('Test Functie');
 
-        $data = $this -> DummyDataService -> calcJaarlijkseOmzetGemeente();
+        $data = $this -> DummyDataService -> calcJaarlijkseOmzet();
         // $data = DummyDataService::ophalenKlantData();
         dump ($data);
         $io->success('Success.');
