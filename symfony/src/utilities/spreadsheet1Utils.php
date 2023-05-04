@@ -8,7 +8,7 @@ use App\Service\DummyDataService;
 use Doctrine\ORM\EntityManagerInterface;
 
 
-class spreadsheetUtils {
+class spreadsheet1Utils {
   private $KlantenService;
 
   public function __construct(EntityManagerInterface $entityManager, KlantenService $KlantenService, DummyDataService $DummyDataService)
@@ -22,17 +22,17 @@ class spreadsheetUtils {
     $spreadsheet = new Spreadsheet();
     $worksheet = $spreadsheet->getActiveSheet();
     $klantData = $this -> KlantenService -> getAllKlantenData();
-    $JaarlijkseOmzet = $this -> DummyDataService -> calcJaarlijkseOmzet();
+    $JaarlijkseOmzet = $this -> DummyDataService -> calcJaarlijkseOmzetKlant();
 
 
     foreach ($klantData as &$customer) {
       $id = $customer['id'];
       if (isset($JaarlijkseOmzet[$id])) {
-          foreach ($JaarlijkseOmzet[$id] as $year => $data) {
-              $customer[$year] = $data;
-          }
+        foreach ($JaarlijkseOmzet[$id] as $year => $data) {
+            $customer[$year] = $data;
+        }
       }
-  }
+    }
 
     $worksheet
       ->setCellValue('A1', 'Klantnummer')
@@ -44,29 +44,46 @@ class spreadsheetUtils {
       ->setCellValue('G1', 'provincie')
       ->setCellValue('H1', 'jaar')
       ->setCellValue('I1', 'omzet')
-      ->setCellValue('J1', 'KwH')
+      ->setCellValue('J1', 'ingekochte KwH')
       ;
  
 
-      $rowCount = 2;
-      foreach ($klantData as $klant) {
-        foreach ($klant as $key => $value) {
-            if (is_numeric($key)) {
-                $worksheet->setCellValue('A' . $rowCount, $klant['id']);
-                $worksheet->setCellValue('B' . $rowCount, $klant['voornaam'] . ' ' . $klant['achternaam']);
-                $worksheet->setCellValue('C' . $rowCount, $klant['postcode']);
-                $worksheet->setCellValue('D' . $rowCount, $klant['huisnummer']);
-                $worksheet->setCellValue('E' . $rowCount, $klant['stad']);
-                $worksheet->setCellValue('F' . $rowCount, $klant['gemeente']);
-                $worksheet->setCellValue('G' . $rowCount, $klant['provincie']);
-                $worksheet->setCellValue('H' . $rowCount, $klant[$key]['jaar']);
-                $worksheet->setCellValue('I' . $rowCount, $klant[$key]['omzet']);
-                $worksheet->setCellValue('J' . $rowCount, $klant[$key]['KwH']);
-                $rowCount++;
-            }
+    $rowCount = 2;
+    foreach ($klantData as $klant) {
+      foreach ($klant as $key => $value) {
+        if (is_numeric($key)) {
+          $worksheet->setCellValue('A' . $rowCount, $klant['id']);
+          $worksheet->setCellValue('B' . $rowCount, $klant['voornaam'] . ' ' . $klant['achternaam']);
+          $worksheet->setCellValue('C' . $rowCount, $klant['postcode']);
+          $worksheet->setCellValue('D' . $rowCount, $klant['huisnummer']);
+          $worksheet->setCellValue('E' . $rowCount, $klant['stad']);
+          $worksheet->setCellValue('F' . $rowCount, $klant['gemeente']);
+          $worksheet->setCellValue('G' . $rowCount, $klant['provincie']);
+          $worksheet->setCellValue('H' . $rowCount, $klant[$key]['jaar']);
+          $worksheet->setCellValue('I' . $rowCount, $klant[$key]['omzet']);
+          $worksheet->setCellValue('J' . $rowCount, $klant[$key]['KwH']);
+          $rowCount++;
         }
+      }
     }
+
+    $headerStyle = [
+      'font' => ['bold' => true],
+      'fill' => [
+          'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'color' => ['rgb' => 'FFA07A'],
+      ],
+      'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT],
+    ];
+    $worksheet->getStyle('A1:J1')->applyFromArray($headerStyle);
   
+    $contentStyle = [
+      'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT],
+    ];
+    $worksheet->getStyle('A2:J'.$rowCount)->applyFromArray($contentStyle);
+
+    
+
       $writer = new Xlsx($spreadsheet);
       $filename = '/Applications/XAMPP/xamppfiles/htdocs/educom-ecopowrrr/symfony/spreadsheets/example.xlsx';
       $writer->save($filename);

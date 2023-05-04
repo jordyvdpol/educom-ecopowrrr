@@ -6,6 +6,7 @@ use App\Entity\DummyData;
 use App\Repository\DummyDataRepository;
 use App\Entity\Klanten;
 use App\Repository\KlantenRepository;
+use App\Service\KlantenService;
 use App\Service\PrijsService;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
@@ -17,14 +18,16 @@ class DummyDataService  {
     private ClassMetadata $metadata;
     private EntityManagerInterface $entityManager;
     private $PrijsService;
+    private $KlantenService;
 
-    public function __construct(EntityManagerInterface $entityManager, DummyDataRepository $DummyDataRepository, KlantenRepository $KlantenRepository, PrijsService $PrijsService)
+    public function __construct(EntityManagerInterface $entityManager, DummyDataRepository $DummyDataRepository, KlantenRepository $KlantenRepository, PrijsService $PrijsService, KlantenService $KlantenService)
     {
         $this->entityManager = $entityManager;
         $this->DummyDataRepository = $DummyDataRepository;
         $this->KlantenRepository = $KlantenRepository;
         $this->metadata = $this->entityManager->getClassMetadata(DummyData::class);
         $this->PrijsService = $PrijsService;
+        $this->KlantenService = $KlantenService;
 
     }
 
@@ -92,8 +95,6 @@ class DummyDataService  {
     
         return $result;
     }
-    
-    
 
     public function getAllDummyData_Rene() {
         $data = $this->DummyDataRepository->findAllById();
@@ -137,36 +138,42 @@ class DummyDataService  {
         }
         return $dummyDataArray;
     }
-    
-    
-
 
     public function calcMaandelijkseOmzet(){
         $allDummyData = DummyDataService::getAllDummyData();
         $allPrijsData = $this->PrijsService->getAllPrijsData();
+        $allKlantenData = $this-> KlantenService -> getAllKlantenData();
+
         $result = [];
         foreach ($allDummyData as $dummy) {
             $klantnummer = $dummy['klantnummer'];
             $jaar = $dummy['jaar'];
             $maand = $dummy['maand'];
             $month_surplus = $dummy['month_surplus'];
-            $prijs = null;
+            $verkoopPrijs = null;
+            $klant = $this -> KlantenRepository -> findOneBy(['id' => $klantnummer]);
+            $gemeente = $klant -> getGemeente();
+            
             foreach ($allPrijsData as $maandPrijsData) {
                 if ($maandPrijsData['jaar'] == $jaar && $maandPrijsData['maand'] == $maand) {
-                    $prijs = $maandPrijsData['verkoopPrijsKwH'];
+                    $verkoopPrijs = $maandPrijsData['verkoopPrijsKwH'];
+                    $inkoopPrijs = $maandPrijsData['inkoopPrijsKwH'];
                     break;
                 }
             }
-            if ($prijs !== null) {
-                $total = $month_surplus * $prijs;
-                    $result[$klantnummer][$jaar][$maand]['omzet'] = $total;
+            if ($verkoopPrijs !== null) {
+                $omzet = $month_surplus * $verkoopPrijs;
+                $winst = $omzet - ($month_surplus * $inkoopPrijs);
+                    $result[$klantnummer][$jaar][$maand]['omzet'] = $omzet;
+                    $result[$klantnummer][$jaar][$maand]['winst'] = $winst;
                     $result[$klantnummer][$jaar][$maand]['KwH'] = $month_surplus;
+                    $result[$klantnummer][$jaar][$maand]['gemeente'] = $gemeente;
             }
         }
         return $result;
     }
 
-    public function calcJaarlijkseOmzet(){
+    public function calcJaarlijkseOmzetKlant(){
         $maandelijkseOmzet = DummyDataService::calcMaandelijkseOmzet();
         $result = [];
         $omzetTotal = 0;
@@ -182,6 +189,33 @@ class DummyDataService  {
                 $result[$klantId][$jaarId]['KwH'] = $KwHTotal;
                 $omzetTotal = 0;
                 $KwHTotal = 0 ;
+            }
+        }
+        // dd($result);
+        return $result;
+    }
+
+    public function calcJaarlijkseGetallenGemeente(){
+        $maandelijkseOmzet = DummyDataService::calcMaandelijkseOmzet();
+        $result = [];
+        $omzetTotal = 0;
+        $KwHTotal = 0;
+
+        foreach ($maandelijkseOmzet as $klantnummer => $jaar) {
+            foreach ($jaar as $jaartal => $maanden) {
+                foreach ($maanden as $maand => $data) {
+                    $gemeente = $data['gemeente'];
+                    if (!isset($result[$gemeente])) {
+                        $result[$gemeente] = [
+                            'omzet' => 0,
+                            'winst' => 0,
+                            'KwH' => 0,
+                        ];
+                    }
+                    $result[$gemeente]['omzet'] += $data['omzet'];
+                    $result[$gemeente]['winst'] += $data['winst'];
+                    $result[$gemeente]['KwH'] += $data['KwH'];
+                }
             }
         }
         // dd($result);
