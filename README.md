@@ -4,7 +4,7 @@
 
 ecopowrrr is een energieleverancier die 100% sustainable en renewable energie aanbiedt. 
 Dit doen ze door het overschot dat huishoudens met  zonnepanelen opwekken in te kopen en vervolgens te verkopen aan hun klanten.
-De applicatie leest informatie uit bij de klanten via hun slimme meter, welke hier via een generieke API nagebootst word. Deze informatie wordt vervolgens lokaal opgeslagen en kan in de vorm van spreadsheets opgehaald worden. Alle functionaliteiten zijn via de commands beschibaar gmeaakt.
+De applicatie leest informatie uit bij de klanten via hun slimme meter, welke hier via een generieke API nagebootst word. Deze informatie wordt vervolgens lokaal opgeslagen en kan in de vorm van spreadsheets opgehaald worden. Alle functionaliteiten zijn via de commands beschikbaar gemaakt.
 
 
 ## Technologieën
