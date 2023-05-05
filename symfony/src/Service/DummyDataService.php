@@ -254,7 +254,6 @@ class DummyDataService  {
                 }
             }
         }
-        dd($result);
         return $result;
     }
     

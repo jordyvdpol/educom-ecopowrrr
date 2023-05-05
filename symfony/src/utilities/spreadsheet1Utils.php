@@ -22,13 +22,13 @@ class spreadsheet1Utils {
     $spreadsheet = new Spreadsheet();
     $worksheet = $spreadsheet->getActiveSheet();
     $klantData = $this -> KlantenService -> getAllKlantenData();
-    $JaarlijkseOmzet = $this -> DummyDataService -> calcJaarlijkseOmzetKlant();
+    $jaarlijkseOmzet = $this -> DummyDataService -> calcJaarlijkseOmzetKlant();
 
 
     foreach ($klantData as &$customer) {
       $id = $customer['id'];
-      if (isset($JaarlijkseOmzet[$id])) {
-        foreach ($JaarlijkseOmzet[$id] as $year => $data) {
+      if (isset($jaarlijkseOmzet[$id])) {
+        foreach ($jaarlijkseOmzet[$id] as $year => $data) {
             $customer[$year] = $data;
         }
       }

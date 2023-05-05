@@ -19,7 +19,7 @@ class spreadsheet3Utils {
   public function maakSpreadsheet() {
     $spreadsheet = new Spreadsheet();
     $worksheet = $spreadsheet->getActiveSheet();
-    $JaarlijkseGetallenGemeente = $this -> DummyDataService -> calcJaarlijkseGetallenGemeente();
+    $jaarlijkseGetallenGemeente = $this -> DummyDataService -> calcJaarlijkseGetallenGemeente();
 
     $worksheet
       ->setCellValue('A1', 'Gemeente')
@@ -29,7 +29,7 @@ class spreadsheet3Utils {
       ;
  
     $rowCount = 2;
-    foreach ($JaarlijkseGetallenGemeente as $Gemeente => $value) {
+    foreach ($jaarlijkseGetallenGemeente as $Gemeente => $value) {
         $worksheet->setCellValue('A' . $rowCount, $Gemeente);
         $worksheet->setCellValue('B' . $rowCount, $value['omzet']);
         $worksheet->setCellValue('C' . $rowCount, $value['winst']);

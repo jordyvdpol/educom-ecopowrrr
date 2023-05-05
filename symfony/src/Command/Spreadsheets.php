@@ -27,12 +27,15 @@ class Spreadsheets extends Command
     public function __construct(
         EntityManagerInterface $entityManager,
         spreadsheet1Utils $spreadsheet1Utils,
+        spreadsheet2Utils $spreadsheet2Utils,
         spreadsheet3Utils $spreadsheet3Utils
+
 
     ) {
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->spreadsheet1Utils = $spreadsheet1Utils;
+        $this->spreadsheet2Utils = $spreadsheet2Utils;
         $this->spreadsheet3Utils = $spreadsheet3Utils;
     }
 
