@@ -16,7 +16,6 @@ class KlantenService {
         $this->entityManager = $entityManager;
         $this->KlantenRepository = $KlantenRepository;
         $this->metadata = $this->entityManager->getClassMetadata(Klanten::class);
-
     }
 
     public function getKlant($klantId) {

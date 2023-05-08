@@ -53,8 +53,12 @@ class updateKlant extends Command{
         $dummyData = maakDummyDataUtils::maakDummyData($klantId, $aantal, $jaar, $maand);
 
         // Dummy data ophalen en opslaan in database
+        if  ($dummyData != false){
         $result = $this -> DummyDataService->registreerDummyData($dummyData, $klantId);
         $io->section($result);
+        } else {
+            $io->section('data is al aanwezig in de database');
+        }
 
         return Command::SUCCESS;
     }

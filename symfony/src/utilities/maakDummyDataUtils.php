@@ -25,6 +25,7 @@ class maakDummyDataUtils
         $total_surplus = 0;
         $month_surplus = 0;
         $data = json_decode($response, true);
+        if($data != null){
         foreach ($data['devices'] as $device) {
             $total_yield += (float) $device['device_total_yield'];
             $month_yield += (float) $device['device_month_yield'];
@@ -46,6 +47,9 @@ class maakDummyDataUtils
         ];
 
         return $dummyData;
+    } else {
+        return false;
+    }
     }
 }
 ?>
