@@ -56,7 +56,7 @@ class spreadsheet3Utils {
     
 
     $writer = new Xlsx($spreadsheet);
-    $filename = '/Applications/XAMPP/xamppfiles/htdocs/educom-ecopowrrr/symfony/spreadsheets/example3.xlsx';
+    $filename = 'C:\xampp\htdocs\educom-ecopowrrr\symfony\spreadsheets\example3.xlsx';
     $writer->save($filename);
     if (file_exists($filename)) {
         echo "Excel file generated successfully at $filename";

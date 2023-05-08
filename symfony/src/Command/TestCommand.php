@@ -2,6 +2,8 @@
 // Command om functies te testen
 namespace App\Command;
 
+use App\Command\executeCommand;
+use App\Command\periodiekOphalenData;
 use App\Service\KlantenService;
 use App\Service\DummyDataService;
 use App\Service\PrijsService;
@@ -27,13 +29,17 @@ class TestCommand extends Command{
     private DummyDataService $DummyDataService;
     private KlantenService $KlantenService;
     private PrijsService $PrijsService;
+    private executeCommand $executeCommand;
+    private periodiekOphalenData $periodiekOphalenData;
 
-    public function __construct(EntityManagerInterface $entityManager, DummyDataService $DummyDataService, KlantenService $KlantenService, PrijsService $PrijsService) {
+    public function __construct(EntityManagerInterface $entityManager, DummyDataService $DummyDataService, KlantenService $KlantenService, PrijsService $PrijsService, executeCommand $executeCommand, periodiekOphalenData $periodiekOphalenData) {
         parent::__construct();
         $this -> entityManager = $entityManager;
         $this -> DummyDataService = $DummyDataService;
         $this -> KlantenService = $KlantenService;
         $this -> PrijsService = $PrijsService;
+        $this -> executeCommand = $executeCommand;
+        $this -> periodiekOphalenData = $periodiekOphalenData;
     }
     
     protected function configure(): void{
@@ -43,7 +49,7 @@ class TestCommand extends Command{
         $io = new SymfonyStyle($input, $output);
         $io->title('Test Functie');
 
-        $data = $this -> DummyDataService -> calcJaarlijkseOmzet();
+        $data = $this -> periodiekOphalenData -> periodiekOphalenData();
         // $data = DummyDataService::ophalenKlantData();
         dump ($data);
         $io->success('Success.');

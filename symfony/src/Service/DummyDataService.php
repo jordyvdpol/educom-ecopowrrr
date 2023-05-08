@@ -187,7 +187,7 @@ class DummyDataService  {
     }
 
     public function calcJaarlijkseGetallenGemeente(){
-        $maandelijkseOmzet = DummyDataService::calcMaandelijkseOmzet();
+        $maandelijkseOmzet = DummyDataService::calcMaandelijkseOmzetKlant();
         $result = [];
         $omzetTotal = 0;
         $KwHTotal = 0;
