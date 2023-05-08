@@ -11,9 +11,7 @@ use PhpOffice\PhpSpreadsheet\Chart\Legend as ChartLegend;
 use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
 use PhpOffice\PhpSpreadsheet\Chart\Properties;
 use PhpOffice\PhpSpreadsheet\Chart\Title;
-
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-
 
 class spreadsheet2Utils {
   private $KlantenService;
@@ -25,7 +23,6 @@ class spreadsheet2Utils {
       $this -> DummyDataService = $DummyDataService;
   }
   
-
     public function maakSpreadsheet() {
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
@@ -98,21 +95,18 @@ class spreadsheet2Utils {
         
         $worksheet->addChart($chart);
         
-        $writer = new Xlsx($spreadsheet);
-        // $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        // $writer = new Xlsx($spreadsheet);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
 
-        $filename = '/Applications/XAMPP/xamppfiles/htdocs/educom-ecopowrrr/symfony/spreadsheets/example2.xlsx';
+        $filename = 'C:\xampp\htdocs\educom-ecopowrrr\symfony\spreadsheets\example2.xlsx';
         $writer->save($filename);
         if (file_exists($filename)) {
             echo "Excel file generated successfully at $filename";
         } else {
             echo "Error generating Excel file";
         }
-    
         return;
     }
-    
-
 }
 
 // functie test command line:
@@ -121,7 +115,3 @@ class spreadsheet2Utils {
 // npm install chart.js regression
 // npm install regression
 ?>
-
-
-
-
