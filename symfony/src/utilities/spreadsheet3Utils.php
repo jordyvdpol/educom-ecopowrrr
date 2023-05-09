@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Service\DummyDataService;
 use Doctrine\ORM\EntityManagerInterface;
 
-
 class spreadsheet3Utils {
   private $KlantenService;
 
@@ -37,7 +36,6 @@ class spreadsheet3Utils {
         $rowCount++;
         }
       
-
     $headerStyle = [
       'font' => ['bold' => true],
       'fill' => [
@@ -52,8 +50,6 @@ class spreadsheet3Utils {
       'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT],
     ];
     $worksheet->getStyle('A2:J'.$rowCount)->applyFromArray($contentStyle);
-
-    
 
     $writer = new Xlsx($spreadsheet);
     $filename = 'C:\xampp\htdocs\educom-ecopowrrr\symfony\spreadsheets\example3.xlsx';

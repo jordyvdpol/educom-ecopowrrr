@@ -58,7 +58,6 @@ class Prijs extends Command{
 
         return Command::SUCCESS;
     }
-
 }
 
 ?>

@@ -32,7 +32,6 @@ class spreadsheetUtils {
         $i++;
       }
   
-
       $writer = new Xlsx($spreadsheet);
       $filename = 'C:\xampp\htdocs\educom-ecopowrrr\symfony\tests\example.xlsx';
       $writer->save($filename);

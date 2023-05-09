@@ -1,12 +1,10 @@
 <?php
 namespace App\utilities;
 
-
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\DummyData;
 use App\Entity\Klanten;
-
 
 class loopMetaData{
     private ClassMetadata $metadata;
@@ -22,7 +20,6 @@ class loopMetaData{
 
     public  function loopData($data) {
         $result = [];
-    
         foreach ($this->metadata->fieldMappings as $key => $mapping) {
             $type = $mapping['type'];
             $func = 'get' . ucwords(str_replace('_', '', $key));
@@ -35,10 +32,5 @@ class loopMetaData{
         return $result;      
     }
 }
-
-// $entityManager = // create EntityManagerInterface instance
-// $entityClassName = 'Klanten'; // or any other entity class name
-// $loopMetaData = new loopMetaData($entityManager, $entityClassName);
-
 
 ?>

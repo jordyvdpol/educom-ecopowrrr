@@ -9,7 +9,6 @@ use App\Repository\KlantenRepository;
 use App\Service\KlantenService;
 use App\Service\PrijsService;
 use Doctrine\ORM\Mapping\ClassMetadata;
-
 use Doctrine\ORM\EntityManagerInterface;
 
 class DummyDataService  {
@@ -28,15 +27,12 @@ class DummyDataService  {
         $this->metadata = $this->entityManager->getClassMetadata(DummyData::class);
         $this->PrijsService = $PrijsService;
         $this->KlantenService = $KlantenService;
-
     }
 
     public function registreerDummyData ($dummyData, $klantId) {
         $data = new DummyData();
-
         $klantRepository = $this -> entityManager -> getRepository(Klanten::class);
         $klantnummer = $klantRepository->find($klantId);
-
         $data -> setKlantnummer($klantnummer);
         $data -> setMessageId($dummyData['message_id']);
         $data -> setStatus($dummyData['status']);
@@ -92,7 +88,6 @@ class DummyDataService  {
             array_push($id, $key['id']);
             dump($key['id']);
             $data = $this -> DummyDataRepository->find($key['id']);
-            // dd($data);
             if (!$data) {
                 $result[] = 'no data available';
             }else {
@@ -182,7 +177,6 @@ class DummyDataService  {
                 $KwHTotal = 0 ;
             }
         }
-        // dd($result);
         return $result;
     }
 
@@ -209,7 +203,6 @@ class DummyDataService  {
                 }
             }
         }
-        // dd($result);
         return $result;
     }
 

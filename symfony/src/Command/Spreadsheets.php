@@ -14,8 +14,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-
-
 #[AsCommand(
     name: 'app:Spreadsheets',
     description: 'Genereer spreadsheets'
@@ -29,8 +27,6 @@ class Spreadsheets extends Command
         spreadsheet1Utils $spreadsheet1Utils,
         spreadsheet2Utils $spreadsheet2Utils,
         spreadsheet3Utils $spreadsheet3Utils
-
-
     ) {
         parent::__construct();
         $this->entityManager = $entityManager;
@@ -66,7 +62,6 @@ class Spreadsheets extends Command
 
     $io->section('');
     $io->section('Success?');
-
 
     return Command::SUCCESS;
 }

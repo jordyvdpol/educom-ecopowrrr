@@ -14,7 +14,6 @@ use PhpOffice\PhpSpreadsheet\Chart\Title;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-
 class spreadsheet2Utils {
   private $KlantenService;
   private $entityManager;
@@ -24,7 +23,6 @@ class spreadsheet2Utils {
       $this->entityManager = $entityManager;
       $this -> DummyDataService = $DummyDataService;
   }
-  
 
     public function maakSpreadsheet() {
         $spreadsheet = new Spreadsheet();

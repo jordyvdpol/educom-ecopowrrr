@@ -45,7 +45,6 @@ class uitlezenDataUtils
             'month_surplus' => $month_surplus,
         ];
 
-
         return $dummyData;
     
         //functie test command line:

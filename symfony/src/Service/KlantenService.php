@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 
 class KlantenService {
-    private $KlantenRepository;
-    
+    private $KlantenRepository;   
     public function __construct(EntityManagerInterface $entityManager, KlantenRepository $KlantenRepository)
     {
         $this->entityManager = $entityManager;
@@ -53,7 +52,6 @@ class KlantenService {
 
     public function loopData($data) {
         $result = [];
-    
         foreach ($this->metadata->fieldMappings as $key => $mapping) {
             $type = $mapping['type'];
             $func = 'get' . ucwords(str_replace('_', '', $key));
@@ -83,9 +81,6 @@ class KlantenService {
         }
         return $result;
     }
-
-
-    
 }
 
 

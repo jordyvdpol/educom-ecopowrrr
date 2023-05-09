@@ -40,7 +40,6 @@ class periodiekOphalenData extends Command
             ->setHelp('Dit commando haalt periodiek de data op voor alle klanten.');
             // ->addOption('interval', 'i', InputOption::VALUE_REQUIRED, 'the interval in seconds', 60);
     }
-
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {

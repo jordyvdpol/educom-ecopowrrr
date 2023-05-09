@@ -52,10 +52,8 @@ class RegistreerKlant extends Command{
         $huisnummer = $input->getArgument('huisnummer') ?: $io->ask('Huisnummer?');
         $aantal = $input->getArgument('aantal') ?: $io->ask('Aantal panelen?');
 
-        // Fetch postcode data
         $postcodeData = PostcodeUtils::fetchPostcodeData($postcode, $huisnummer);
         
-        // Voeg klant aan database toe
         $klantData = [
             'voornaam' => $voornaam,
             'achternaam' => $achternaam,
@@ -69,13 +67,10 @@ class RegistreerKlant extends Command{
         $klantId = $this-> KlantenService->registreerKlanten($klantData);
         $io->section(sprintf('Succes: klant met ID %d is toegevoegd aan de database', $klantId));
         
-        // Activeer apparaat
         activeerDummyApparaatUtils::activatiebericht('actief', $klantId, $aantal);
 
-        // Fetch dummy data apparaat
         $dummyData = uitlezenDataUtils::uitlezenDummyData($klantId);
 
-        // Dummy data ophalen en opslaan in database
         $result = $this -> DummyDataService->registreerDummyData($dummyData, $klantId);
         $io->section($result);
 

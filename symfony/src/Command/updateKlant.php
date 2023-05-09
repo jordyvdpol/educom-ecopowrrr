@@ -48,11 +48,8 @@ class updateKlant extends Command{
         $jaar = $input->getArgument('jaar') ?: $io->ask('Jaartal?');
         $maand = $input->getArgument('maand') ?: $io->ask('Maand (in getal)?');
 
-
-        // Fetch dummy data apparaat
         $dummyData = maakDummyDataUtils::maakDummyData($klantId, $aantal, $jaar, $maand);
 
-        // Dummy data ophalen en opslaan in database
         if  ($dummyData != false){
         $result = $this -> DummyDataService->registreerDummyData($dummyData, $klantId);
         $io->section($result);

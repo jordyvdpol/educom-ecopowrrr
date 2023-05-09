@@ -7,7 +7,6 @@ use App\Service\KlantenService;
 use App\Service\DummyDataService;
 use Doctrine\ORM\EntityManagerInterface;
 
-
 class spreadsheet1Utils {
   private $KlantenService;
 
@@ -23,7 +22,6 @@ class spreadsheet1Utils {
     $worksheet = $spreadsheet->getActiveSheet();
     $klantData = $this -> KlantenService -> getAllKlantenData();
     $jaarlijkseOmzet = $this -> DummyDataService -> calcJaarlijkseOmzetKlant();
-
 
     foreach ($klantData as &$customer) {
       $id = $customer['id'];

@@ -37,8 +37,6 @@ class PrijsService {
             return (sprintf('Er is iets misgegaan bij het registreren van de prijs data: %s', $e->getMessage()));
         }
     }
-    
-
 
     public function getAllPrijsData() {
         $prijsData = $this->PrijsRepository->findAll();
@@ -55,8 +53,6 @@ class PrijsService {
         }
         return $prijsDataArray;
     }
-        
 }
-
 
 ?>

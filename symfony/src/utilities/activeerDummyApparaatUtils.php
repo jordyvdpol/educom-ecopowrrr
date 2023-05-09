@@ -12,14 +12,12 @@ class activeerDummyApparaatUtils{
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
 
-
         $response = curl_exec($ch);
 
         if ($response === false) {
             throw new Exception('Error fetching data: ' . curl_error($ch));
         }
         curl_close($ch);
-
         return $response;
     }
 
@@ -27,6 +25,4 @@ class activeerDummyApparaatUtils{
 
        //functie test command line:
         // php -r "require '/Applications/XAMPP/xamppfiles/htdocs/educom-ecopowrrr/symfony/src/utilities/activeerDummyApparaatUtils.php'; echo json_encode(App\utilities\uitlezenData::uitlezenDummyData('actief', '4', '5'));"
-
-
 ?>

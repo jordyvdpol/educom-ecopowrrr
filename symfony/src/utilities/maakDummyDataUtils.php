@@ -47,9 +47,9 @@ class maakDummyDataUtils
         ];
 
         return $dummyData;
-    } else {
-        return false;
-    }
+        } else {
+            return false;
+        }
     }
 }
 ?>
